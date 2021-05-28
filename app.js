@@ -7,6 +7,10 @@ document.getElementById("pushBtn").addEventListener('click', () => {
   clearUs()
 })
 
+function cleanInput(message) {
+  return validator.escape(message)
+}
+
 function clearUs() {
   $('#title').val("")
   $('#date').val("")
@@ -18,10 +22,10 @@ function clearUs() {
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 function getInfo() {
-  const title = $('#title').val()
+  const title = cleanInput($('#title').val())
   const date = $('#date').val().split("-")
   const time = $('#time').val()
-  const descriptionHead = $('#descriptionHead').val()
+  const descriptionHead = cleanInput($('#descriptionHead').val())
   const payLoad = { title, descriptionHead, date: `${months[(date[1] - 1)].slice(0, 3)} ${date[2]}, ${date[0]} ${time}:00`, mainHead: `${date[2]}<sup>${getOrdinal(date[2])}</sup> Of ${months[(date[1] - 1)]}`, year: `${months[(date[1] - 1)].slice(0, 3)} | ${date[0]}`, number: date[2] }
   return payLoad
 }
