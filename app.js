@@ -1,11 +1,12 @@
 document.getElementById("pushBtn").addEventListener('click', () => {
-  const { descriptionHead = "", date, title, year, mainHead } = getInfo()
-  const file = contentFile(date, year, mainHead, title, descriptionHead)
-  console.log('file:', file)
+  const { descriptionContent = "", date, subContent, tabTitle, mainContent } = getInfo()
+  const file = contentFile(date, tabTitle, mainContent, subContent, descriptionContent)
   const filename = "index.html"
   download(filename, file)
   clearUs()
 })
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 function cleanInput(message) {
   return validator.escape(message)
@@ -19,14 +20,18 @@ function clearUs() {
   return
 }
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
 function getInfo() {
-  const title = cleanInput($('#title').val())
+  const subContent = cleanInput($('#title').val())
   const date = $('#date').val().split("-")
   const time = $('#time').val()
-  const descriptionHead = cleanInput($('#descriptionHead').val())
-  const payLoad = { title, descriptionHead, date: `${months[(date[1] - 1)].slice(0, 3)} ${date[2]}, ${date[0]} ${time}:00`, mainHead: `${date[2]}<sup>${getOrdinal(date[2])}</sup> Of ${months[(date[1] - 1)]}`, year: `${months[(date[1] - 1)].slice(0, 3)} | ${date[0]}`, number: date[2] }
+  const descriptionContent = cleanInput($('#descriptionHead').val())
+  const payLoad = {
+    subContent,
+    descriptionContent,
+    date: `${months[(date[1] - 1)].slice(0, 3)} ${date[2]}, ${date[0]} ${time ? time : '00:00'}:00`,
+    mainHead: `${date[2]}<sup>${getOrdinal(date[2])}</sup> Of ${months[(date[1] - 1)]}`,
+    tabTitle: `${months[(date[1] - 1)].slice(0, 3)} | ${date[0]}`
+  }
   return payLoad
 }
 
@@ -48,7 +53,7 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-function contentFile(time, tabTitle, mainHead, title, descriptionHead) {
+function contentFile(date, tabTitle, mainContent, subContent, descriptionContent) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +71,7 @@ function contentFile(time, tabTitle, mainHead, title, descriptionHead) {
 <title>Your journey</title>
 <script>
 document.title = '${tabTitle}'
-  const timer = '${time}'
+  const timer = '${date}'
 
   var countDownDate = new Date(timer).getTime();
 
@@ -251,9 +256,9 @@ padding: 10px 20px;
 
 <body>
 <div class="container">
-<h1 class="mainLead">${mainHead}</h1>
-<h4 class="demo addSpace">${title}</h4>
-<h6 class="demo addSpace">${descriptionHead}</h6>
+<h1 class="mainLead">${mainContent}</h1>
+<h4 class="demo addSpace">${subContent}</h4>
+<h6 class="demo addSpace">${descriptionContent}</h6>
 <div class="main" id="main">
   <div id="countdown"></div>
 </div>
