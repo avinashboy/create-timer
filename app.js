@@ -29,7 +29,7 @@ function getInfo() {
     subContent,
     descriptionContent,
     date: `${months[(date[1] - 1)].slice(0, 3)} ${date[2]}, ${date[0]} ${time ? time : '00:00'}:00`,
-    mainHead: `${date[2]}<sup>${getOrdinal(date[2])}</sup> Of ${months[(date[1] - 1)]}`,
+    mainContent: `${date[2]}<sup>${getOrdinal(date[2])}</sup> Of ${months[(date[1] - 1)]}`,
     tabTitle: `${months[(date[1] - 1)].slice(0, 3)} | ${date[0]}`
   }
   return payLoad
