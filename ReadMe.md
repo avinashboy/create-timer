@@ -1,5 +1,7 @@
 # Create Timer
 
+### <a href="https://avinashboy.github.io/create-timer/">Live Demo</a>
+
 ### *Note*: It will collect some information from you. After pressing the push button it will generate a new file. Now you can customise timer.
 
 ## Screenshots:
