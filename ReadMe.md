@@ -1,11 +1,11 @@
-## Create Timer
+# Create Timer
 
-### <a href="https://avinashboy.github.io/create-timer/">LIVE DEMO</a>
+## About it:
 
-### It will collect some information from you. After pressing the push button it will generate a new file.  
+### It will collect some information from you. After pressing the push button it will generate a new file. Now you can customise timer.
 
 ## Screenshots:
 
-*This is creator page*
+_This is creator page_
 
 ![view page](./Screenshot/info.png)
