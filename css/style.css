@@ -88,3 +88,14 @@
     width: 100%;
   }
 }
+
+@media only screen and (max-width: 512px) {
+  .iframe {
+    height: 100vh;
+  }
+}
+
+.iframe {
+  width: 100%;
+  min-height: 60vh;
+}
