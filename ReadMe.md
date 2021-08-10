@@ -10,3 +10,7 @@
 _This is creator page_
 
 ![view page](./Screenshot/info.png)
+
+_More options_
+
+![view page](./Screenshot/options.png)
