@@ -2,14 +2,14 @@
 
 ### <a href="https://avinashboy.github.io/create-timer/">Live Demo</a>
 
-### *Note*: It will collect some information from you. After pressing the push button it will generate a new file. Now you can customise timer.
+### _Note_: It will collect some information from you. After pressing the push button it will generate a new file. Now you can customize timer or Share your file with others.
 
 ## Screenshots:
 
-_This is creator page_
+_Create Your Own Time_
 
 ![view page](./Screenshot/info.png)
 
-_More options_
+_More Options_
 
 ![view page](./Screenshot/options.png)

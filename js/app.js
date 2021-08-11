@@ -2,16 +2,17 @@
   "use strict";
   let colorName = "Default",
     tempText = "",
-    tempFileName = "";
+    tempFileName = "",
+    tempInfoLink = null;
 
   document.getElementById("pushBtn").addEventListener("click", () => {
     const {
       descriptionContent = "",
-      date,
-      subContent,
-      tabTitle,
-      mainContent,
-      uiPart,
+        date,
+        subContent,
+        tabTitle,
+        mainContent,
+        uiPart,
     } = getInfo();
 
     const file = contentFile(
@@ -29,6 +30,7 @@
     clearUs();
     $(".main,#pushBtn").fadeOut();
     $(".subMain").fadeIn();
+    tempInfoLink = null;
   });
 
   document
@@ -36,10 +38,10 @@
     .addEventListener("click", hideOrUnhide);
 
   function hideOrUnhide() {
-    $(".hides").is(":visible")
-      ? ($("#showAdvance").text("Show Advance"),
-        $(".hides").css("display", "none"))
-      : ($("#showAdvance").text("Show Less"),
+    $(".hides").is(":visible") ?
+      ($("#showAdvance").text("Show Advance"),
+        $(".hides").css("display", "none")) :
+      ($("#showAdvance").text("Show Less"),
         $(".hides").css("display", "block"));
   }
 
@@ -117,11 +119,54 @@
         color: "#EC7E74",
         bg: "#686664",
       },
+      mangoterrarium: {
+        color: "#E1B976",
+        bg: "#8D8E7C",
+      },
+      cherrywhite: {
+        color: "#B44A56",
+        bg: "#F9F5F4",
+      },
+      greenpurple: {
+        color: "#D6D9AE",
+        bg: "#9C82AB",
+      },
+      pinknavyblue: {
+        color: "#F7EEF0",
+        bg: "#6D749E",
+      },
+      sweetcorntoffee: {
+        color: "#F3EFDF",
+        bg: "#9B8271",
+      },
+      aspengoldprincessblue: {
+        color: "#FBDF8FF",
+        bg: "#4A83B7",
+      },
+      soybeaneclipse: {
+        color: "#E0D1B8",
+        bg: "#6E6C7C",
+      },
+      rosepinkpurple: {
+        color: "#E690A9",
+        bg: "#745483",
+      },
+      mellowyellowverdantgreen: {
+        color: "#FBEBA0",
+        bg: "#688B69",
+      },
+      darkbluered: {
+        color: "#4962B6",
+        bg: "#E64F49",
+      },
     };
 
     for (const property in colorInfo) {
       if (property === value) {
-        let { bg, color } = colorInfo[property];
+        let {
+          bg,
+          color
+        } = colorInfo[property];
         if (swap) invertColorChanger(bg, color);
         else colorChanger(bg, color);
       }
@@ -188,6 +233,8 @@
     $("#textColor").val("#000000");
     $("#boxTextColor").val("#000000");
     $("#numberColor").val("#000000");
+    $("#selectValueColor").val("Default").change();
+    $("#flexCheckChecked").prop("checked", false);
     return;
   }
 
@@ -310,15 +357,15 @@
 
   function getOrdinal(day) {
     var a = day % 10;
-    return 1 == ~~((day % 100) / 10)
-      ? "th"
-      : 1 === a
-      ? "st"
-      : 2 === a
-      ? "nd"
-      : 3 === a
-      ? "rd"
-      : "th";
+    return 1 == ~~((day % 100) / 10) ?
+      "th" :
+      1 === a ?
+      "st" :
+      2 === a ?
+      "nd" :
+      3 === a ?
+      "rd" :
+      "th";
   }
 
   function download(filename, text) {
@@ -377,14 +424,28 @@
     $("input[type='radio'][name='inlineRadioOptions']").click(function () {
       const value = $(this).val();
       if (value === "file") download(tempFileName, tempText);
-      if (value === "link")
+      if (value === "link" && tempInfoLink === null) {
+        const spinners = document.createElement("div");
+        spinners.innerHTML = `
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        `;
+        $("#pasteHere").append(spinners);
         link(tempFileName, tempText)
           .then((res) => {
-            const { url } = res;
+            $("#pasteHere").empty();
+            const {
+              url
+            } = res;
+            tempInfoLink = url;
             const div = document.createElement("div");
             div.innerHTML = `
-            <input id="foo" value="${url}">
-            <button class="btn btn-primary" data-clipboard-action="copy" data-clipboard-target="#foo">copy</button>
+            <div class="form-text">
+              These file to Distributed Web.If you once upload you can' delete it
+            </div>
+            <input id="foo" value="${url}" size="34">
+            <button class="btn btn-primary" data-clipboard-action="copy" data-clipboard-target="#foo"><i class="fas fa-copy"></i></button>
             `;
             document.getElementById("pasteHere").appendChild(div);
             var clipboard = new ClipboardJS(".btn");
@@ -401,6 +462,7 @@
           .catch((error) => {
             alert("danger", error);
           });
+      }
     });
   }
 
@@ -410,8 +472,13 @@
       port: 5001,
       protocol: "https",
     });
-    const { path } = await ipfs.add(text);
-    return { url: `https://ipfs.io/ipfs/${path}`, fileName };
+    const {
+      path
+    } = await ipfs.add(text);
+    return {
+      url: `https://ipfs.io/ipfs/${path}`,
+      fileName,
+    };
   }
 
   function contentFile(
