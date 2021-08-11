@@ -1,8 +1,8 @@
 (() => {
   "use strict";
   let colorName = "Default",
-    tempText = "",
-    tempFileName = "",
+    tempText = null,
+    tempFileName = null,
     tempInfoLink = null;
 
   document.getElementById("pushBtn").addEventListener("click", () => {
@@ -420,6 +420,7 @@
     document.getElementById("backBtn").onclick = () => {
       $(".main,#pushBtn").fadeIn();
       $(".subMain").empty();
+      tempText = tempInfoLink = tempFileName = null;
     };
     $("input[type='radio'][name='inlineRadioOptions']").click(function () {
       const value = $(this).val();
