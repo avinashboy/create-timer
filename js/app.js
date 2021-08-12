@@ -5,14 +5,26 @@
     tempFileName = null,
     tempInfoLink = null;
 
+  const listOfIpfsgateway = [
+    "ipfs.io",
+    "ipfs.infura.io",
+    "infura-ipfs.io",
+    "dweb.link",
+    "ipfs.mihir.ch",
+    "ivoputzer.xyz",
+    "ipfs.drink.cafe",
+    "gateway.ipfs.io",
+    "astyanax.io",
+  ];
+
   document.getElementById("pushBtn").addEventListener("click", () => {
     const {
       descriptionContent = "",
-        date,
-        subContent,
-        tabTitle,
-        mainContent,
-        uiPart,
+      date,
+      subContent,
+      tabTitle,
+      mainContent,
+      uiPart,
     } = getInfo();
 
     const file = contentFile(
@@ -38,10 +50,10 @@
     .addEventListener("click", hideOrUnhide);
 
   function hideOrUnhide() {
-    $(".hides").is(":visible") ?
-      ($("#showAdvance").text("Show Advance"),
-        $(".hides").css("display", "none")) :
-      ($("#showAdvance").text("Show Less"),
+    $(".hides").is(":visible")
+      ? ($("#showAdvance").text("Show Advance"),
+        $(".hides").css("display", "none"))
+      : ($("#showAdvance").text("Show Less"),
         $(".hides").css("display", "block"));
   }
 
@@ -163,10 +175,7 @@
 
     for (const property in colorInfo) {
       if (property === value) {
-        let {
-          bg,
-          color
-        } = colorInfo[property];
+        let { bg, color } = colorInfo[property];
         if (swap) invertColorChanger(bg, color);
         else colorChanger(bg, color);
       }
@@ -357,15 +366,15 @@
 
   function getOrdinal(day) {
     var a = day % 10;
-    return 1 == ~~((day % 100) / 10) ?
-      "th" :
-      1 === a ?
-      "st" :
-      2 === a ?
-      "nd" :
-      3 === a ?
-      "rd" :
-      "th";
+    return 1 == ~~((day % 100) / 10)
+      ? "th"
+      : 1 === a
+      ? "st"
+      : 2 === a
+      ? "nd"
+      : 3 === a
+      ? "rd"
+      : "th";
   }
 
   function download(filename, text) {
@@ -393,9 +402,12 @@
       Back
     </button>
   `;
+    const infoText = document.createElement("div");
+    infoText.setAttribute("class", "fst-normal text-muted fs-3 mb-2 mt-2");
+    infoText.innerText = "Preview of your counter";
     const div = document.createElement("div");
     div.innerHTML = `
-    <div class="col-sm-6 mt-3">
+    <div class="col-sm-12 mt-3">
       <div class="mb-3">
         <label for="background" class="form-label d-block">Choose </label>
         <div class="box">
@@ -416,7 +428,7 @@
     div.setAttribute("class", "mt-2 mb-3");
     document
       .getElementsByClassName("showDemo")[0]
-      .append(otherDiv, iframe, div);
+      .append(otherDiv, infoText, iframe, div);
     document.getElementById("backBtn").onclick = () => {
       $(".main,#pushBtn").fadeIn();
       $(".subMain").empty();
@@ -436,19 +448,22 @@
         link(tempFileName, tempText)
           .then((res) => {
             $("#pasteHere").empty();
-            const {
-              url
-            } = res;
+            const { url } = res;
             tempInfoLink = url;
             const div = document.createElement("div");
+            div.setAttribute("class", "mb-5 mt-3");
             div.innerHTML = `
             <div class="form-text">
-              These file to Distributed Web.If you once upload you can' delete it
+            These files are uploaded to Distributed Web (IPFS). If you once uploaded you can't delete it.
             </div>
-            <input id="foo" value="${url}" size="34">
-            <button class="btn btn-primary" data-clipboard-action="copy" data-clipboard-target="#foo"><i class="fas fa-copy"></i></button>
+            <input id="foo" value="${url}" size="20">
+            <button class="btn btn-primary mt-2 " data-clipboard-action="copy" data-clipboard-target="#foo"><i class="fas fa-copy"></i></button>
+            <button class="btn btn-primary ml-3 mr-3 mt-2" data-bs-toggle="tooltip" data-bs-placement="right" title="To Get other link" id="redoLoadLink"><i class="fas fa-redo"></i></button>
             `;
             document.getElementById("pasteHere").appendChild(div);
+            document
+              .getElementById("redoLoadLink")
+              .addEventListener("click", redoLoadLinks);
             var clipboard = new ClipboardJS(".btn");
 
             clipboard.on("success", function (e) {
@@ -467,15 +482,39 @@
     });
   }
 
+  function redoLoadLinks() {
+    const [protocol, url, subDomain, hash] = $("#foo")
+      .val()
+      .split("/")
+      .filter((a) => {
+        if (typeof a === "string" && a.length > 0) {
+          return a;
+        }
+      });
+
+    if (listOfIpfsgateway.length <= 1)
+      return (
+        $("#foo").val("Oops Sorry. Try again.!!!"),
+        $("#redoLoadLink").attr("aria-disabled", true),
+        $("#redoLoadLink").addClass("disabled")
+      );
+
+    const index = listOfIpfsgateway.indexOf(url);
+    if (index > -1) listOfIpfsgateway.splice(index, 1);
+
+    const alternativeUrl =
+      listOfIpfsgateway[Math.floor(Math.random() * listOfIpfsgateway.length)];
+    $("#foo").val(`${protocol}//${alternativeUrl}/${subDomain}/${hash}`);
+    return;
+  }
+
   async function link(fileName, text) {
     const ipfs = IpfsHttpClient.create({
       host: "ipfs.infura.io",
       port: 5001,
       protocol: "https",
     });
-    const {
-      path
-    } = await ipfs.add(text);
+    const { path } = await ipfs.add(text);
     return {
       url: `https://ipfs.io/ipfs/${path}`,
       fileName,
