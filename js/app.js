@@ -20,11 +20,11 @@
   document.getElementById("pushBtn").addEventListener("click", () => {
     const {
       descriptionContent = "",
-      date,
-      subContent,
-      tabTitle,
-      mainContent,
-      uiPart,
+        date,
+        subContent,
+        tabTitle,
+        mainContent,
+        uiPart,
     } = getInfo();
 
     const file = contentFile(
@@ -45,15 +45,13 @@
     tempInfoLink = null;
   });
 
-  document
-    .getElementById("showAdvance")
-    .addEventListener("click", hideOrUnhide);
+  document.getElementById("showAdvance").addEventListener("click", hideOrUnhide);
 
   function hideOrUnhide() {
-    $(".hides").is(":visible")
-      ? ($("#showAdvance").text("Show Advance"),
-        $(".hides").css("display", "none"))
-      : ($("#showAdvance").text("Show Less"),
+    $(".hides").is(":visible") ?
+      ($("#showAdvance").text("Show Advance"),
+        $(".hides").css("display", "none")) :
+      ($("#showAdvance").text("Show Less"),
         $(".hides").css("display", "block"));
   }
 
@@ -175,7 +173,10 @@
 
     for (const property in colorInfo) {
       if (property === value) {
-        let { bg, color } = colorInfo[property];
+        let {
+          bg,
+          color
+        } = colorInfo[property];
         if (swap) invertColorChanger(bg, color);
         else colorChanger(bg, color);
       }
@@ -366,15 +367,15 @@
 
   function getOrdinal(day) {
     var a = day % 10;
-    return 1 == ~~((day % 100) / 10)
-      ? "th"
-      : 1 === a
-      ? "st"
-      : 2 === a
-      ? "nd"
-      : 3 === a
-      ? "rd"
-      : "th";
+    return 1 == ~~((day % 100) / 10) ?
+      "th" :
+      1 === a ?
+      "st" :
+      2 === a ?
+      "nd" :
+      3 === a ?
+      "rd" :
+      "th";
   }
 
   function download(filename, text) {
@@ -390,10 +391,18 @@
     document.body.removeChild(element);
   }
 
+  function makeBlob(data, type) {
+    return (window.URL || window.webkitURL).createObjectURL(new Blob([data], {
+      type: type
+    }));
+  }
+
   function forIframe(text) {
-    const linkData = "data:text/html;charset=utf-8," + encodeURIComponent(text);
+    // const linkData = "data:text/html;charset=utf-8," + encodeURIComponent(text);
+    let ownBlob = makeBlob(text, "text/html")
+    console.log('ownBlob:', ownBlob)
     const iframe = document.createElement("iframe");
-    iframe.src = `${linkData}`;
+    iframe.src = `${ownBlob}`;
     iframe.setAttribute("class", "iframe");
     const otherDiv = document.createElement("div");
     otherDiv.setAttribute("class", "col-sm-1 mt-3 mb-4");
@@ -404,10 +413,10 @@
   `;
     const infoText = document.createElement("div");
     infoText.setAttribute("class", "fst-normal text-muted fs-3 mb-2 mt-2");
-    infoText.innerText = "Preview of your counter";
+    infoText.innerText = "Preview of your timer";
     const div = document.createElement("div");
     div.innerHTML = `
-    <div class="col-sm-12 mt-3">
+    <div class="col-sm-12 mt-3 mb-5">
       <div class="mb-3">
         <label for="background" class="form-label d-block">Choose </label>
         <div class="box">
@@ -448,7 +457,9 @@
         link(tempFileName, tempText)
           .then((res) => {
             $("#pasteHere").empty();
-            const { url } = res;
+            const {
+              url
+            } = res;
             tempInfoLink = url;
             const div = document.createElement("div");
             div.setAttribute("class", "mb-5 mt-3");
@@ -514,7 +525,9 @@
       port: 5001,
       protocol: "https",
     });
-    const { path } = await ipfs.add(text);
+    const {
+      path
+    } = await ipfs.add(text);
     return {
       url: `https://ipfs.io/ipfs/${path}`,
       fileName,
@@ -538,13 +551,15 @@
   <meta name="og:description" content="Wait for it">
   <meta name="og:url" content="">
   <meta name="og:title" content="Count timer">
+  <meta http-equiv="Content-Security-Policy"
+    content="script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa' 'self'; child-src blob: ;object-src 'self'; font-src https://*.googleapis.com"; />
   <meta name="og:image" content="https://i.ibb.co/kJSVKwx/iconfinder-stop-watch-time-count-2203547.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="shortcut icon" href="https://i.ibb.co/kJSVKwx/iconfinder-stop-watch-time-count-2203547.png" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css?family=Lato|Montserrat|Rubik+Mono+One&display=swap" rel="stylesheet" />
   <title>Your journey</title>
-  <script>
+  <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa">
   document.title = '${tabTitle}'
     const timer = '${date}'
     const started = '${uiPart.text.pastText}'
