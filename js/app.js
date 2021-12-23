@@ -708,16 +708,14 @@
     font-size: 5em;
   }
   
-  /* Add
-  */
-  .demo a {
-    text-transform: uppercase;
-    font-size: 35px;
-    font-weight: 300;
-    color: var(--textColor);
-    text-align: center;
-    text-decoration: none;
-  }
+//   .demo a {
+//     text-transform: uppercase;
+//     font-size: 35px;
+//     font-weight: 300;
+//     color: var(--textColor);
+//     text-align: center;
+//     text-decoration: none;
+//   }
   
   @media only screen and (max-width: 500px) {
     body {
