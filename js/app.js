@@ -619,20 +619,15 @@
     --numberColor : ${uiPart.color.numberColor}
     --boxTextColor: ${uiPart.color.boxTextColor}
   }
-  html {
-    display: grid;
-    min-height: 100%;
-  }
   
   body {
-    display: grid;
     background: var(--bg);
+    max-height: 100%;
   }
   
   .main {
     position: relative;
     margin: auto;
-    overflow: hidden;
     width: 850px;
     height: 480px;
   }
@@ -726,14 +721,15 @@
   
   @media only screen and (max-width: 500px) {
     body {
-      overflow: hidden;
-    }
-    .main {
-      width: 50%;
-      height: 100%;
-      display: flex;
-      flex-flow: column;
-    }
+        overflow: scroll;
+      }
+
+      .main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+      }
   
     .days,
     .hours,
